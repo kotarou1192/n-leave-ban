@@ -14,6 +14,12 @@ type User struct {
 	DiscordID  sql.NullString `gorm:"unique;not null"`
 }
 
+func AddIndex() {
+	db := dbloader.InitDB()
+	defer db.Close()
+	db.Model(&User{}).AddIndex("index_discord_id", "discord_id")
+}
+
 func (user *User) GetLeaveCount() (int, error) {
 	if user.LeaveCount.Valid {
 		return int(user.LeaveCount.Int64), nil
